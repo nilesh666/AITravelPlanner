@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: deployment
+metadata:
+  name: streamlit-app
+  labels:
+    app: streamlit
+sepc:
+  replicas: 1
+  selector:
+    metchlabels:
+      app: streamlit
+  template:
+    metadata:
+      labels:
+      app: streamlit
+    spec:
+      containers:
+        - name: streamlit-container
+          image: streamlit-app:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8501
+          envFrom:
+            - secretRef:
+                name: llmops-secret
+---
+apiVersion: v1
+kind: service
+metadata:
+  name: streamlit
+spec:
+  type: LoadBalancer
+  selector: 
+    app: streamlit
+  ports:
+    - porotocol: TCP
+      port: 80
+      TargetPort: 8501
+
+
+
+
+
+
